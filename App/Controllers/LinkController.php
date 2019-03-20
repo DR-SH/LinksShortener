@@ -19,22 +19,29 @@ class LinkController
      */	
     public function actionCreate()
     {
-		if (!isset($_POST['test'])){  //если по маршруту не передавался POST, вывести ошибку		
+		if (!isset($_POST['long'])){  //если по маршруту не передавался POST, вывести ошибку		
 			header ("HTTP/1.1 404 Not Found");
 			header("Status: 404 Not Found");
 			exit();			
 		} 
 
 		$long = $this->handleInput($_POST['long']); //long link
+		$long = $this->makeAbsolut($long);
 		$short = $this->handleInput($_POST['short']); //short link
 		$errors = $this->checkErrors($long, $short);
 		if($errors){
-			var_dump($errors);
+			echo json_encode(['status' => '0', 'errors' => $errors]);
 		}
 		else{
 			$link = new Link;
-			var_dump($link->createLink($long, $short));
-			 echo 'добавлены! в БД значения '.$long.' и '.$short;
+			$result = $link->createLink($long, $short);
+			if($result){
+				echo json_encode(['status' => '1', 'short' => $result, 'long' => $long]);
+			}
+			else{
+				echo json_encode(['status' => '0', 'errors' => ['Ошибка сервера']]);
+			}
+
 		}
     }	 
 	 
@@ -84,6 +91,19 @@ class LinkController
 		$trimmedText = htmlspecialchars(trim($text));
 		return $trimmedText;
 	}
-	
+
+	/**
+	 * Add 'http://' if link didn't have it
+	 *
+	 * @param string
+	 * @return string
+	 */
+	private function makeAbsolut($text)
+	{
+		if(!parse_url($text, PHP_URL_SCHEME)){
+			$text = 'http://'.$text;
+		}
+		return $text;
+	}
 
 }

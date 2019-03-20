@@ -17,8 +17,8 @@ class Link
     public static function show()
     {
 
-        $pdoquery = 'SELECT * FROM category WHERE id>0';
-        $res = $this->db->query($pdoquery);
+        $query = 'SELECT * FROM category WHERE id>0';
+        $res = $this->db->query($query);
         $res->setFetchMode(PDO::FETCH_ASSOC);
         $list = [];
         while ($row = $res->fetch()) {
@@ -29,7 +29,10 @@ class Link
 
 
     /**
-     * @param $array[name, link, status]
+     * Create new link.
+     *
+     * @param string $long - long lonk
+     * @param string $short - short link
      * @return bool
      *
      */
@@ -39,11 +42,12 @@ class Link
         if(empty($short)){
             $short = $this->makeShortLink();
         }
-        $pdoquery = 'INSERT INTO links SET `short`=:short, `long`=:long';
-        $res = $this->db->prepare($pdoquery);
-        $res->bindParam(':name', $array['name'], PDO::PARAM_INT);
-        $res->bindParam(':link', $array['link'], PDO::PARAM_INT);
-        return $res->execute(['short' => $short, 'long' => $long]);
+        $query = 'INSERT INTO links SET `short`=:short, `long`=:long';
+        $res = $this->db->prepare($query);
+        if($res->execute(['short' => $short, 'long' => $long])){
+            return $short;
+        }
+        return 0;
     }
 		
     /**
@@ -53,8 +57,8 @@ class Link
      */
     public function checkShort($short = 0)
 	{
-        $pdoquery = 'SELECT COUNT(*) FROM links WHERE `short`=:short';
-        $stmt = $this->db->prepare($pdoquery);
+        $query = 'SELECT COUNT(*) FROM links WHERE `short`=:short';
+        $stmt = $this->db->prepare($query);
         $stmt->execute(['short' => $short]);
         return ($stmt->fetchColumn() > 0) ? false : true ;
     }
@@ -102,7 +106,7 @@ class Link
         if (empty($short)){
             return true;
         }
-        $pat = '/^[a-z0-9]{5,10}$/i';
+        $pat = '/^[a-z0-9]{6,10}$/i';
         return preg_match($pat, $short);
     }
 
@@ -114,14 +118,14 @@ class Link
      */
     private function makeShortLink()
     {
-       // do{
+        do {
             $count = rand(6,9);
             $result = '';
             $array = array_merge(range('a','z'), range('0','9'));
             for($i = 0; $i < $count; $i++){
                 $result .= $array[mt_rand(0, 35)];
             }
-        //} while($this->checkShort($result));
+        } while($this->checkShort($result) == false);
 
         return $result;
     }

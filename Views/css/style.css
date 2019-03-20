@@ -1,0 +1,24 @@
+#container {
+    margin: 30px 10%;
+    border: 1px solid #D0D0D0;
+    box-shadow: 0 0 8px #D0D0D0;
+}
+
+.inner {
+    margin: 0 30px;
+    padding: 20px 0;
+}
+
+.inner p{
+    color: #500;
+}
+
+#sendForm input, #sendForm button{
+    width: 100%;
+    margin: 10px 0;
+    padding: 5px;
+}
+
+#result ul li{
+    color: #F00;
+}

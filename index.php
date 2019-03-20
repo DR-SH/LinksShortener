@@ -4,14 +4,13 @@ namespace App;
 //Общие найстройки
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+//error_reporting(0);
 session_start();
-//Подключение файлов системы
 
+//Автозагрузка
 define('ROOT', dirname(__FILE__));
 require ROOT.'/Vendor/autoload.php';
-require_once (ROOT.'/App/Components/Db.php');
-//require_once  (ROOT.'/models/Link.php');
-//Соединение с БД
+
 //Вызов роутера
 $router = new Components\Router;
 $router->run();
