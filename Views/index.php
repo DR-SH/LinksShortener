@@ -12,14 +12,13 @@
 <div id="container">
 	<div class="inner">
 		<div id="sendForm">
-			<p>Что нужно укоротить</p>
+			<p>Сервис для получения коротких ссылок</p>
 			<input type="text" id="inputLong" placeholder="Укажите URL длинной ссылки">
-			<input type="text" id="inputShort" placeholder="Здесь можно(но не обязательно) указать короткую ссылку">
-			<br>
-			<button id="button">Получить короткую ссылку</button>
+			<input type="text" id="inputShort" placeholder="Здесь можно указать короткую ссылку (но не обязательно)">
+			<button id="buttonGetLink">Получить короткую ссылку</button>
 		</div>
-		<div id="result">
-		</div>
+		<div id="result"></div>
+        <button id="buttonBack">Сгенерировать другую ссылку</button>
 	</div>
 </div>
 

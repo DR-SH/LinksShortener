@@ -1,14 +1,19 @@
 window.onload = function() {
 
-	var butt = document.getElementById('button');
+	var buttonGetLink = document.getElementById('buttonGetLink');
+	var buttonBack = document.getElementById('buttonBack');
 
-	butt.addEventListener('click', addLink);
+	buttonGetLink.addEventListener('click', addLink);
+	buttonBack.addEventListener('click', getBack);
 
+	/**
+	 * Adding link to db using ajax post
+	 */
 	function addLink(){
 		var shortLink =  document.getElementById('inputShort');
 		var longLink =  document.getElementById('inputLong');
 		var short = shortLink.value;
-		var long = longLink.value;
+		var long = encodeURIComponent(longLink.value);
 		postAjax(short, long, 'create/', function(){
 			var array = JSON.parse(this.responseText);
 			if(array.status == 0){
@@ -21,6 +26,14 @@ window.onload = function() {
 		});
 	}
 
+	/**
+	 * Ajax post handling
+	 *
+	 * @param {string} short
+	 * @param {string} long
+	 * @param {string} url
+	 * @param {function} callback
+	 */
 	function postAjax(short, long, url, callback) {
 		var request = new XMLHttpRequest();
 		request.onreadystatechange = function () {
@@ -36,7 +49,11 @@ window.onload = function() {
 		request.send('short=' + short + '&long=' + long);
 	}
 
-
+	/**
+	 * Display errors
+	 *
+	 * @param {array} errors
+	 */
 	function printErrors(errors) {
 		var ul = document.createElement('ul');
 		for (var i = 0; i< errors.length; i++){
@@ -45,8 +62,15 @@ window.onload = function() {
 		var errDiv = document.getElementById('result');
 		errDiv.innerHTML = '';
 		errDiv.appendChild(ul);
+
 	}
 
+	/**
+	 * Display short link
+	 *
+	 * @param {string} short
+	 * @param {string} long
+	 */
 	function showResult(short, long)
 	{
 		var shortLabel = document.createElement('p');
@@ -55,7 +79,7 @@ window.onload = function() {
 		var longLabel = document.createElement('p');
 		longLabel.innerHTML = 'Ваша длинная ссылка:';
 
-		shortLink = document.createElement('a');
+		var shortLink = document.createElement('a');
 		shortLink.href = short;
 		shortLink.innerHTML = document.domain + '/' +  short;
 
@@ -64,12 +88,25 @@ window.onload = function() {
 		longLink.innerHTML = long;
 
 		var errDiv = document.getElementById('result');
+		document.getElementById('sendForm').style.display = 'none';
 
 		errDiv.innerHTML = '';
 		errDiv.appendChild(shortLabel);
 		errDiv.appendChild(shortLink);
 		errDiv.appendChild(longLabel);
 		errDiv.appendChild(longLink);
+
+		buttonBack.style.display = 'block';
 	}
 
+	/**
+	 * Erase results and return to input
+	 */
+	function getBack(e) {
+		e.target.style.display = 'none';
+		document.getElementById('result').innerHTML = '';
+		document.getElementById('inputShort').value = '';
+		document.getElementById('inputLong').value = '';
+		document.getElementById('sendForm').style.display = 'block';
+	}
 }
