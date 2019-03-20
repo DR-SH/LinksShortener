@@ -108,7 +108,7 @@ class Link
      */
     public function validateLong($long)
     {
-        $pat = '/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\S]*)*\/?/i';
+        $pat = '/^(https?:\/\/)?([\w\.]+)\.([a-z]{2,6}\.?)(\/[\S]*)*\/?$/i';
         return preg_match($pat, $long);
     }
 
