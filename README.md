@@ -8,3 +8,5 @@
     <li>Отдача ссылки реализована асинхронным запросом без перезагрузки страницы.</li>
     <li>Автозагрузка PSR-4.</li>
 </ul>
+Протестировать работу приложения можно по данному адресу:
+<a href = 'https://plated-appearance.000webhostapp.com/'>https://plated-appearance.000webhostapp.com/</a>
